@@ -1,1 +1,87 @@
-<p>institucion works!</p>
+<div class="institucion-container">
+  <mat-toolbar color="primary" class="page-toolbar">
+    <mat-icon>school</mat-icon>
+    <span>Información de la Institución</span>
+    <span class="spacer"></span>
+    <button mat-raised-button color="accent" (click)="editarInstitucion()">
+      <mat-icon>edit</mat-icon>
+      Editar
+    </button>
+  </mat-toolbar>
+
+  <div class="content" *ngIf="institucion">
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>school</mat-icon>
+          {{ institucion.nombre }}
+        </mat-card-title>
+        <mat-card-subtitle>Código: {{ institucion.codigo }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <mat-icon>location_on</mat-icon>
+            <div>
+              <strong>Dirección:</strong>
+              <p>{{ institucion.direccion }}</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>phone</mat-icon>
+            <div>
+              <strong>Teléfono:</strong>
+              <p>{{ institucion.telefono }}</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>email</mat-icon>
+            <div>
+              <strong>Email:</strong>
+              <p>{{ institucion.email }}</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>person</mat-icon>
+            <div>
+              <strong>Director:</strong>
+              <p>{{ institucion.director }}</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>category</mat-icon>
+            <div>
+              <strong>Tipo:</strong>
+              <p>{{ institucion.tipo }}</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>class</mat-icon>
+            <div>
+              <strong>Nivel:</strong>
+              <p>{{ institucion.nivel }}</p>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="content" *ngIf="!institucion">
+    <mat-card class="info-card">
+      <mat-card-content>
+        <div class="no-data">
+          <mat-icon>info</mat-icon>
+          <h3>No hay información de la institución</h3>
+          <p>Haga clic en "Editar" para agregar la información de la institución.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,1 +1,77 @@
-<p>grado-estudio works!</p>
+<div class="grado-estudio-container">
+  <mat-toolbar color="primary" class="page-toolbar">
+    <mat-icon>class</mat-icon>
+    <span>Gestión de Grados de Estudio</span>
+    <span class="spacer"></span>
+    <button mat-raised-button color="accent" (click)="agregarGrado()">
+      <mat-icon>add</mat-icon>
+      Nuevo Grado
+    </button>
+  </mat-toolbar>
+
+  <div class="content">
+    <mat-card class="table-card">
+      <mat-card-content>
+        <div class="table-container">
+          <table mat-table [dataSource]="grados" class="grados-table">
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>ID</th>
+              <td mat-cell *matCellDef="let grado">{{ grado.id }}</td>
+            </ng-container>
+
+            <!-- Nombre Column -->
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef>Nombre</th>
+              <td mat-cell *matCellDef="let grado">{{ grado.nombre }}</td>
+            </ng-container>
+
+            <!-- Nivel Column -->
+            <ng-container matColumnDef="nivel">
+              <th mat-header-cell *matHeaderCellDef>Nivel</th>
+              <td mat-cell *matCellDef="let grado">{{ grado.nivel }}</td>
+            </ng-container>
+
+            <!-- Sección Column -->
+            <ng-container matColumnDef="seccion">
+              <th mat-header-cell *matHeaderCellDef>Sección</th>
+              <td mat-cell *matCellDef="let grado">{{ grado.seccion }}</td>
+            </ng-container>
+
+            <!-- Año Column -->
+            <ng-container matColumnDef="año">
+              <th mat-header-cell *matHeaderCellDef>Año</th>
+              <td mat-cell *matCellDef="let grado">{{ grado['año'] }}</td>
+            </ng-container>
+
+            <!-- Estado Column -->
+            <ng-container matColumnDef="estado">
+              <th mat-header-cell *matHeaderCellDef>Estado</th>
+              <td mat-cell *matCellDef="let grado">
+                <span [class]="grado.estado ? 'estado-activo' : 'estado-inactivo'">
+                  {{ grado.estado ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Acciones Column -->
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <td mat-cell *matCellDef="let grado">
+                <button mat-icon-button color="primary" (click)="editarGrado(grado)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="eliminarGrado(grado)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

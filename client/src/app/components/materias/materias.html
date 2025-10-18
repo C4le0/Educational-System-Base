@@ -1,1 +1,77 @@
-<p>materias works!</p>
+<div class="materias-container">
+  <mat-toolbar color="primary" class="page-toolbar">
+    <mat-icon>book</mat-icon>
+    <span>Gestión de Materias</span>
+    <span class="spacer"></span>
+    <button mat-raised-button color="accent" (click)="agregarMateria()">
+      <mat-icon>add</mat-icon>
+      Nueva Materia
+    </button>
+  </mat-toolbar>
+
+  <div class="content">
+    <mat-card class="table-card">
+      <mat-card-content>
+        <div class="table-container">
+          <table mat-table [dataSource]="materias" class="materias-table">
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>ID</th>
+              <td mat-cell *matCellDef="let materia">{{ materia.id }}</td>
+            </ng-container>
+
+            <!-- Nombre Column -->
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef>Nombre</th>
+              <td mat-cell *matCellDef="let materia">{{ materia.nombre }}</td>
+            </ng-container>
+
+            <!-- Descripción Column -->
+            <ng-container matColumnDef="descripcion">
+              <th mat-header-cell *matHeaderCellDef>Descripción</th>
+              <td mat-cell *matCellDef="let materia">{{ materia.descripcion }}</td>
+            </ng-container>
+
+            <!-- Grado Column -->
+            <ng-container matColumnDef="grado">
+              <th mat-header-cell *matHeaderCellDef>Grado</th>
+              <td mat-cell *matCellDef="let materia">{{ materia.gradoEstudioId }}</td>
+            </ng-container>
+
+            <!-- Docente Column -->
+            <ng-container matColumnDef="docente">
+              <th mat-header-cell *matHeaderCellDef>Docente</th>
+              <td mat-cell *matCellDef="let materia">{{ materia.docenteId }}</td>
+            </ng-container>
+
+            <!-- Estado Column -->
+            <ng-container matColumnDef="estado">
+              <th mat-header-cell *matHeaderCellDef>Estado</th>
+              <td mat-cell *matCellDef="let materia">
+                <span [class]="materia.estado ? 'estado-activo' : 'estado-inactivo'">
+                  {{ materia.estado ? 'Activo' : 'Inactivo' }}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Acciones Column -->
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <td mat-cell *matCellDef="let materia">
+                <button mat-icon-button color="primary" (click)="editarMateria(materia)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="eliminarMateria(materia)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
