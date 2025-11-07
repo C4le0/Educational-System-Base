@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-50s1ft(57mm1u+4d0l$w)q)&+&rgp)%h4o6o!bf(*5bc^(p_-r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
@@ -37,10 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'school',  # 👈 agrega esto
+    'rest_framework',  # Django REST Framework
+    'rest_framework.authtoken',  # Autenticación por token
+    'corsheaders',  # CORS para comunicación con Angular
+    'school',  # App principal
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # CORS debe ir primero
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -49,6 +53,20 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Deshabilitar CSRF para API REST (solo para desarrollo)
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',  # Cambiar a IsAuthenticated en producción
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+    'EXCEPTION_HANDLER': 'school.exceptions.custom_exception_handler',  # Handler personalizado para errores JSON
+}
 
 ROOT_URLCONF = 'core.urls'
 
@@ -73,6 +91,30 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# Database
+# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+
+# Configuración para SQL Server (comentada)
+# Si quieres usar SQL Server, descomenta esta configuración y comenta la de SQLite
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mssql',
+#         'NAME': 'codelatin_db',  # Nombre de tu base de datos
+#         # IMPORTANTE: Cambia 'HOST' por el nombre exacto de tu servidor SQL Server
+#         # Opciones comunes:
+#         # - 'localhost' (SQL Server estándar)
+#         # - 'localhost\\SQLEXPRESS' (SQL Server Express - nota las dobles barras invertidas)
+#         # - 'TU_COMPUTADORA\\SQLEXPRESS' (Express con nombre de instancia)
+#         'HOST': 'localhost\\SQLEXPRESS',  # ⚠️ CAMBIA ESTO por tu servidor
+#         'PORT': '1433',  # Puerto por defecto de SQL Server
+#         'OPTIONS': {
+#             'driver': 'ODBC Driver 17 for SQL Server',
+#             'trusted_connection': 'yes',  # Usa autenticación de Windows
+#         },
+#     }
+# }
+
+# Configuración para SQLite (Activa)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -121,3 +163,20 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# CORS Configuration - Permite comunicación con Angular
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200",  # Angular dev server
+    "http://127.0.0.1:4200",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+# Para desarrollo - permite todos los orígenes (cambiar en producción)
+CORS_ALLOW_ALL_ORIGINS = True
+
+# Deshabilitar CSRF para API REST (solo para desarrollo)
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:4200',
+    'http://127.0.0.1:4200',
+]

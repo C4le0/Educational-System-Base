@@ -1,0 +1,16 @@
+{
+  "python.defaultInterpreterPath": "C:\\Users\\Brian\\AppData\\Local\\Programs\\Python\\Python310\\python.exe",
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportMissingImports": "warning"
+  },
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.extraPaths": [
+    "C:\\Users\\Brian\\AppData\\Local\\Programs\\Python\\Python310\\lib\\site-packages"
+  ],
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true
+  }
+}
+

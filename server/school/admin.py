@@ -1,6 +1,6 @@
 # Register your models here.
 from django.contrib import admin
-from .models import Institucion, Periodo, Grado, Profesor, Materia, Alumno, Calificacion
+from .models import Institucion, Periodo, Grado, Profesor, Materia, Alumno, Calificacion, Personal
 
 
 @admin.register(Institucion)
@@ -48,3 +48,10 @@ class CalificacionAdmin(admin.ModelAdmin):
     list_display = ("alumno", "materia", "periodo", "calificacion")
     list_filter = ("materia", "periodo", "alumno__grado")
     search_fields = ("alumno__nombre", "alumno__apellido", "materia__nombre")
+
+
+@admin.register(Personal)
+class PersonalAdmin(admin.ModelAdmin):
+    list_display = ("nombre", "apellido", "cedula", "cargo", "estado", "institucion")
+    list_filter = ("cargo", "estado", "institucion")
+    search_fields = ("nombre", "apellido", "cedula")
