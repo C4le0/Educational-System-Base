@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-50s1ft(57mm1u+4d0l$w)q)&+&rgp)%h4o6o!bf(*5bc^(p_-r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', 'backend', 'codelatin-backend']
 
 
 # Application definition
@@ -115,6 +115,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # }
 
 # Configuración para SQLite (Activa)
+# En Docker, el volumen montado en ./server/data asegura la persistencia
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

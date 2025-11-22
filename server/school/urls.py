@@ -15,5 +15,5 @@ router.register(r'personal', views.PersonalViewSet)
 router.register(r'auth', views.AuthViewSet, basename='auth')
 
 urlpatterns = [
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),  # Las rutas ya están bajo /api/ desde core/urls.py
 ]

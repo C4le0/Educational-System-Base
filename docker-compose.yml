@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: codelatin-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Montar el código para desarrollo (opcional, comentar en producción)
+      - ./server:/app
+      # Persistir la base de datos SQLite en el directorio data
+      - ./server/data:/app/data
+      # Montar la base de datos directamente (alternativa)
+      - ./server/db.sqlite3:/app/db.sqlite3
+    environment:
+      - DJANGO_SETTINGS_MODULE=core.settings
+      - PYTHONUNBUFFERED=1
+    # El entrypoint.sh maneja las migraciones y el inicio del servidor
+    # command: python manage.py runserver 0.0.0.0:8000  # Se ejecuta desde entrypoint.sh
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
