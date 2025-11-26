@@ -19,6 +19,6 @@ def api_root(request):
             'periodos': '/api/periodos/',
             'calificaciones': '/api/calificaciones/',
         },
-        'documentation': 'Consulta DOCUMENTACION.md para más información'
+        'documentation': 'Consulta README.md para más información'
     })
 

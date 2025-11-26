@@ -4,7 +4,12 @@ Sistema de gestión educativa desarrollado con Django REST Framework (Backend) y
 
 ## 🚀 Inicio Rápido
 
-### Opción 1: Con Docker (Recomendado)
+### Requisitos
+
+- Docker Desktop (Windows/Mac) o Docker Engine (Linux)
+- Docker Compose (incluido con Docker Desktop)
+
+### Ejecutar el Proyecto
 
 1. **Clonar el repositorio**
    ```bash
@@ -12,57 +17,16 @@ Sistema de gestión educativa desarrollado con Django REST Framework (Backend) y
    cd CodeLatin-7
    ```
 
-2. **Ejecutar con Docker Compose**
+2. **Iniciar con Docker Compose**
    ```bash
    docker-compose up --build
    ```
 
 3. **Verificar que funciona**
-   - Abre: http://localhost:8000/api/
+   - Backend API: http://localhost:8000/api/
+   - Admin Django: http://localhost:8000/admin/
 
 ¡Listo! El backend está corriendo. 🎉
-
-### Opción 2: Sin Docker (Localmente)
-
-1. **Instalar dependencias**
-   ```bash
-   cd server
-   python -m venv venv
-   venv\Scripts\activate  # Windows
-   # source venv/bin/activate  # Linux/Mac
-   pip install -r requirements.txt
-   ```
-
-2. **Ejecutar migraciones**
-   ```bash
-   python manage.py migrate
-   ```
-
-3. **Iniciar el servidor**
-   ```bash
-   python manage.py runserver
-   ```
-
-El servidor estará disponible en: http://localhost:8000
-
-### Documentación Completa
-
-Para instrucciones detalladas, solución de problemas y más información, consulta:
-- **[DOCKER.md](DOCKER.md)** - 📦 Documentación completa de Docker (construcción, ejecución, configuración, troubleshooting)
-- **[server/COMO_EJECUTAR.md](server/COMO_EJECUTAR.md)** - Guía completa de cómo ejecutar Django
-- **[DOCUMENTACION.md](DOCUMENTACION.md)** - Documentación técnica del proyecto
-
-## 📋 Requisitos
-
-**Con Docker:**
-- Docker Desktop (Windows/Mac) o Docker Engine (Linux)
-- Docker Compose (incluido con Docker Desktop)
-- Git
-
-**Sin Docker:**
-- Python 3.11 o superior
-- pip (gestor de paquetes de Python)
-- Git
 
 ## 🛠️ Comandos Útiles
 
@@ -81,6 +45,9 @@ docker-compose down
 
 # Crear superusuario (admin)
 docker-compose exec backend python manage.py createsuperuser
+
+# Ejecutar migraciones manualmente
+docker-compose exec backend python manage.py migrate
 ```
 
 ## 📁 Estructura del Proyecto
@@ -89,21 +56,23 @@ docker-compose exec backend python manage.py createsuperuser
 CodeLatin-7/
 ├── server/          # Backend Django REST Framework
 ├── client/          # Frontend Angular
-├── docker-compose.yml
-├── DOCKER.md        # Documentación completa de Docker
-└── DOCUMENTACION.md # Documentación técnica
+└── docker-compose.yml
 ```
 
-## 🔗 Enlaces
+## 🔗 Endpoints de la API
 
-- **Backend API**: http://localhost:8000/api/
+- **API Root**: http://localhost:8000/api/
+- **Estudiantes**: http://localhost:8000/api/estudiantes/
+- **Grados**: http://localhost:8000/api/grados/
+- **Instituciones**: http://localhost:8000/api/instituciones/
+- **Materias**: http://localhost:8000/api/materias/
+- **Personal**: http://localhost:8000/api/personal/
+- **Periodos**: http://localhost:8000/api/periodos/
+- **Calificaciones**: http://localhost:8000/api/calificaciones/
 - **Admin Django**: http://localhost:8000/admin/
 
-## 📚 Más Información
+## 📝 Notas
 
-Consulta la [documentación completa](DOCUMENTACION.md) para:
-- Estructura de la API
-- Modelos de datos
-- Endpoints disponibles
-- Configuración avanzada
-
+- Las migraciones se ejecutan automáticamente al iniciar el contenedor
+- La base de datos SQLite persiste en `server/db.sqlite3`
+- El código está montado como volumen para desarrollo (cambios se reflejan automáticamente)
