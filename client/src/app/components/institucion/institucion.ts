@@ -36,7 +36,7 @@ export class InstitucionComponent implements OnInit {
   }
 
   loadInstitucion() {
-    this.institucionService.getAll().subscribe({
+    this.institucionService.getInstituciones().subscribe({
       next: (data: Institucion[] | null) => {
         this.instituciones = data ?? [];
       },
@@ -66,7 +66,7 @@ export class InstitucionComponent implements OnInit {
     const confirmed = confirm(`¿Está seguro de eliminar a ${institucion.nombre}?`);
     if (!confirmed) return;
 
-    this.institucionService.delete(institucion.id).subscribe({
+    this.institucionService.deleteInstitucion(institucion.id).subscribe({
       next: () => {
         this.loadInstitucion();
       },

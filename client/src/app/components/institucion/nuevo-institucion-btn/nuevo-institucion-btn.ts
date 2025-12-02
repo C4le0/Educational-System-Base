@@ -16,8 +16,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatInputModule,
     MatButtonModule
   ],
-  templateUrl: './nuevo-institucion-btn.htm',
-  styleUrls: ['./nuevo-institucion-btn.htm']
+  templateUrl: './nuevo-institucion-btn.html',
+  styleUrls: ['./nuevo-institucion-btn.html']
 })
 export class NuevoInstitucionBtnComponent implements OnInit {
   form!: FormGroup;
@@ -47,5 +47,9 @@ export class NuevoInstitucionBtnComponent implements OnInit {
 
   cancelar(): void {
     this.dialogRef.close();
+  }
+
+  get nombre() {
+    return this.form.get('nombre');
   }
 }
