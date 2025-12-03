@@ -46,16 +46,10 @@ export class PersonalComponent implements OnInit {
     });
   }
 
-  agregarPersonal(): void {
-    const ref = this.dialog.open(NuevoPersonalDialogComponent, {
-      width: '500px'
-    });
-
-    ref.afterClosed().subscribe((nuevo: Personal) => {
-      if (nuevo) this.loadPersonal();   // recarga tabla
-    });
+  agregarPersonal() {
+    console.log('Agregar nuevo personal');
+    // TODO: Implementar modal/dialog para agregar personal
   }
-
 
   editarPersonal(personal: Personal) {
     console.log('Editar personal:', personal);
