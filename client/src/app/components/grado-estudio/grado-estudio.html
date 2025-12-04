@@ -10,41 +10,6 @@
   </mat-toolbar>
 
   <div class="content">
-    <!-- Formulario para crear grado -->
-    <mat-card *ngIf="mostrarFormulario" class="form-card">
-      <mat-card-header>
-        <mat-card-title>Nuevo Grado</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <form (ngSubmit)="guardarGrado()">
-          <div class="form-row">
-            <mat-form-field>
-              <mat-label>Nombre</mat-label>
-              <input matInput [(ngModel)]="nuevoGrado.nombre" name="nombre" required>
-            </mat-form-field>
-            <mat-form-field>
-              <mat-label>Institución</mat-label>
-              <mat-select [(ngModel)]="nuevoGrado.institucion" name="institucion" required>
-                <mat-option *ngFor="let institucion of instituciones" [value]="institucion.id">
-                  {{ institucion.nombre }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="form-row">
-            <mat-form-field class="full-width">
-              <mat-label>Descripción</mat-label>
-              <textarea matInput [(ngModel)]="nuevoGrado.descripcion" name="descripcion" rows="3"></textarea>
-            </mat-form-field>
-          </div>
-          <div class="form-actions">
-            <button mat-raised-button type="button" color="warn" (click)="cancelarFormulario()">Cancelar</button>
-            <button mat-raised-button type="submit" color="primary">Guardar</button>
-          </div>
-        </form>
-      </mat-card-content>
-    </mat-card>
-
     <mat-card class="table-card">
       <mat-card-content>
         <div class="table-container">

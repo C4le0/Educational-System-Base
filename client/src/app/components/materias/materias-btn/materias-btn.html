@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>Agregar Nueva Materia</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Nombre *</mat-label>
+      <input matInput formControlName="nombre" />
+      <mat-error *ngIf="nombre?.hasError('required')">
+        Campo obligatorio
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Grado de Estudio *</mat-label>
+      <mat-select formControlName="gradoEstudioId">
+        <mat-option *ngFor="let grado of grados" [value]="grado.id">
+          {{ grado.nombre }} <span *ngIf="grado.institucion_nombre">- {{ grado.institucion_nombre }}</span>
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="gradoEstudioId?.hasError('required')">
+        Campo obligatorio
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput formControlName="descripcion" rows="3"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="guardar()">Guardar</button>
+</mat-dialog-actions>
+
