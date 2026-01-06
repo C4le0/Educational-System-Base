@@ -1,29 +1,28 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { map, tap, catchError } from 'rxjs/operators';
 import { Usuario, LoginRequest, LoginResponse } from '../models/usuario.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  // ✅ Corregido: usa los endpoints reales de Django
-  private loginUrl = 'http://localhost:8000/api/auth/login/';
-  private registerUrl = 'http://localhost:8000/api/auth/register/';
-  // Nota: change-password no está implementado aún en Django
+  // API endpoints for Django backend authentication
+  private readonly loginUrl = 'http://localhost:8000/api/auth/login/';
+  private readonly registerUrl = 'http://localhost:8000/api/auth/register/';
 
-  private currentUserSubject = new BehaviorSubject<Usuario | null>(null);
-  public currentUser$ = this.currentUserSubject.asObservable();
+  private readonly currentUserSubject = new BehaviorSubject<Usuario | null>(null);
+  public readonly currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     // Restaurar sesión desde localStorage al iniciar
     this.loadUserFromStorage();
   }
 
   // Cargar usuario/token desde localStorage (si existen)
   private loadUserFromStorage(): void {
-    if (typeof window === 'undefined') return;
+    if (globalThis.window === undefined) return;
 
     const token = localStorage.getItem('token');
     const savedUser = localStorage.getItem('currentUser');
@@ -39,44 +38,58 @@ export class AuthService {
     }
   }
 
-  // ✅ Login real con Django + JWT (SimpleJWT)
+  // Login with Django backend - returns LoginResponse with usuario object
   login(credentials: LoginRequest): Observable<LoginResponse> {
     return this.http.post<any>(this.loginUrl, credentials).pipe(
-      tap(response => {
-        // La respuesta de SimpleJWT es:
-        // { refresh: '...', access: '...', user: { id, username, email } }
+      map(response => {
+        // Build Usuario object from Django response
+        // Note: 'rol' comes from response.user.rol (added by AuthViewSet in school/api/views.py)
         const user: Usuario = {
           id: response.user.id,
           username: response.user.username,
           email: response.user.email,
-          // ⚠️ rol no viene por defecto de `User`; lo tendrás que agregar en Django
-          rol: response.user.rol || 'Usuario', // provisional
-          token: response.access // Token JWT requerido por el tipo Usuario
+          /**
+           * IMPORTANT: The 'rol' property comes from within the 'user' object.
+           * 
+           * Original Error: "Cannot read properties of undefined (reading 'rol')"
+           * Cause: tap() was used instead of map(), so the transformed response wasn't returned.
+           * Fix: Changed to map() to return the LoginResponse with usuario.rol.
+           * 
+           * Educational System Roles:
+           * - 'Administrador': is_superuser = True (full system access)
+           * - 'Docente': is_staff = True (teacher access)
+           * - 'Estudiante': regular user (student access)
+           */
+          rol: response.user.rol || 'Usuario',
+          token: response.token || response.access
         };
 
         const loginResponse: LoginResponse = {
-          token: response.access, // JWT de acceso
-          refreshToken: response.refresh, // opcional: para renovar token
+          token: response.token || response.access,
+          refreshToken: response.refresh,
           usuario: user,
-          expiresIn: 3600 // 1h típico de SimpleJWT (puedes calcularlo del token si quieres)
+          expiresIn: 3600
         };
 
+        // Save auth data and update current user subject
         this.saveAuthData(loginResponse);
         this.currentUserSubject.next(user);
+
+        // Return the transformed response so login.ts receives usuario.rol
+        return loginResponse;
       }),
       catchError(error => {
         console.error('Login error:', error);
-        return throwError(() => new Error(error.error?.detail || 'Error en autenticación'));
+        return throwError(() => new Error(error.error?.detail || error.error?.error || 'Error en autenticación'));
       })
     );
   }
 
-  // ✅ Registro real
+  // Register new user with Django backend
   registerUser(userData: { username: string; email: string; password: string }): Observable<any> {
     return this.http.post<any>(this.registerUrl, userData).pipe(
-      tap(response => {
-        // Opcional: loguear automáticamente tras registro
-        // this.saveAuthData({...})
+      tap(() => {
+        // Auto-login after registration can be implemented here if needed
       }),
       catchError(error => {
         console.error('Register error:', error);
@@ -86,7 +99,7 @@ export class AuthService {
     );
   }
 
-  // ✅ Logout: limpia todo
+  // Logout: clears all stored auth data
   logout(): void {
     this.clearStorage();
     this.currentUserSubject.next(null);
@@ -112,7 +125,10 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    if (globalThis.window === undefined) {
+      return null;
+    }
+    return localStorage.getItem('token');
   }
 
   // ✅ Obtener encabezados con token (útil para interceptores)
@@ -142,7 +158,7 @@ export class AuthService {
   // 👇 Métodos auxiliares privados
 
   private saveAuthData(loginResponse: LoginResponse): void {
-    if (typeof window === 'undefined') return;
+    if (globalThis.window === undefined) return;
 
     localStorage.setItem('token', loginResponse.token);
     // Guarda el refreshToken si lo usas (ej: para renovar sesión)
@@ -153,7 +169,7 @@ export class AuthService {
   }
 
   private clearStorage(): void {
-    if (typeof window === 'undefined') return;
+    if (globalThis.window === undefined) return;
 
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
